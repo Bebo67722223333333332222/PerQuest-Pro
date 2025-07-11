@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PerQuest Bot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Variables */
+    :root {
+      --primary: #0070ff;
+      --background: #0f1015;
+      --text: #ffffff;
+      --muted: #999999;
+      --card: #1a1b20;
+      --radius: 12px;
+      --transition-speed: 0.3s;
+      --border: #2e2f3a;
+    }
+
+    /* Base Styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Navigation Bar */
+    nav {
+      background: #1c1d23;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border);
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+      position: relative;
+      padding-bottom: 5px;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary);
+      transition: width var(--transition-speed) ease-out;
+    }
+    nav a:hover {
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
+    nav a.active-nav-link {
+        color: var(--primary);
+    }
+    nav a.active-nav-link::after {
+        width: 100%;
+    }
+
+    /* Sections */
+    section {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+      display: none;
+      min-height: calc(100vh - 150px);
+    }
+    section.active {
+      display: block;
+      animation: fadeInFromBottom 0.7s ease-out forwards;
+    }
+
+    /* Keyframe Animations */
+    @keyframes fadeInFromBottom {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+    }
+    .hero img {
+      width: 100px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      transition: transform 0.4s ease-in-out;
+    }
+    .hero img:hover {
+        transform: scale(1.05) rotate(2deg);
+    }
+    .hero h1 {
+      color: var(--primary);
+      font-size: 36px;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      animation: slideInRight 0.8s ease-out forwards;
+      opacity: 0;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto 20px;
+      animation: fadeInFromBottom 1s ease-out forwards;
+      opacity: 0;
+      animation-delay: 0.2s;
+    }
+    .hero .btn {
+        animation: fadeInFromBottom 1.2s ease-out forwards;
+        opacity: 0;
+        animation-delay: 0.4s;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      margin: 5px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 112, 255, 0.3);
+    }
+    .btn:hover {
+      background: #005bb5;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 112, 255, 0.45);
+    }
+
+    /* Cards - Enhancements for Responsiveness */
+    .card {
+      background: var(--card);
+      padding: 20px;
+      border-radius: var(--radius);
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      /* Added for responsive layout in sections */
+      display: flex;
+      flex-direction: column;
+      width: 100%; /* Ensure card takes full width of its container */
+      box-sizing: border-box; /* Include padding and border in the width */
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.45);
+    }
+    .card h3 {
+      margin-bottom: 8px;
+      color: var(--primary);
+      font-size: 18px; /* Original font size for h3 in card */
+    }
+    .card p {
+      color: var(--muted);
+      font-size: 16px; /* Original font size for p in card */
+    }
+
+    /* Section Headers */
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      font-size: 36px;
+      margin-bottom: 40px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    h2::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 0;
+        width: 80px;
+        height: 4px;
+        background-color: var(--primary);
+        border-radius: 2px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--muted);
+      margin-top: 50px;
+      border-top: 1px solid var(--border);
+      background: var(--card);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: row;
+        gap: 20px;
+        padding: 15px;
+      }
+      nav a {
+        font-size: 16px;
+        padding-bottom: 5px;
+      }
+      .hero {
+        padding: 60px 20px;
+        min-height: auto;
+      }
+      .hero img {
+        width: 100px;
+      }
+      .hero h1 {
+        font-size: 36px;
+      }
+      .hero p {
+        font-size: 16px;
+      }
+      .btn {
+        padding: 12px 24px;
+        font-size: 18px;
+        display: inline-block;
+      }
+      section {
+        padding: 40px 20px;
+      }
+      h2 {
+        font-size: 36px;
+        margin-bottom: 40px;
+      }
+      .card {
+        padding: 20px;
+        /* Cards will naturally stack due to width: 100% and being block-level */
+      }
+      .card h3 {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+        .hero h1 {
+            font-size: 30px;
+        }
+        .hero p {
+            font-size: 15px;
+        }
+        h2 {
+            font-size: 28px;
+        }
+        /* No need to change .card styles here as width: 100% already handles it */
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="#" onclick="showPage('home', this)">Home</a>
+    <a href="#" onclick="showPage('terms', this)">Terms of Use</a>
+    <a href="#" onclick="showPage('privacy', this)">Privacy Policy</a>
+    <a href="#" onclick="showPage('policy', this)">Bot Policy</a>
+  </nav>
+
+  <section id="home" class="active">
+    <div class="hero">
+      <img src="https://i.postimg.cc/SsSP6xFv/Add-Text.png" alt="PerQuest Logo">
+      <h1>Welcome to PerQuest</h1>
+      <p>Secure and manage your Discord server with powerful features and interactive control.</p>
+      <a href="https://discord.com/oauth2/authorize?client_id=1391785893483905124&scope=bot" class="btn" target="_blank">Invite Bot</a>
+      <a href="https://discord.gg/P8GSVENSeJ" class="btn" target="_blank">Support Server</a>
+    </div>
+  </section>
+
+  <section id="terms">
+    <h2>Terms of Use</h2>
+    <div class='card'><h3>1. Acceptance of Terms</h3><p>By using PerQuest, you agree to these terms and conditions in full.</p></div>
+    <div class='card'><h3>2. Modifications</h3><p>We reserve the right to update these terms at any time.</p></div>
+    <div class='card'><h3>3. Service Access</h3><p>Access to the bot may be restricted or terminated at any time.</p></div>
+    <div class='card'><h3>4. User Responsibility</h3><p>Users are responsible for their actions while using the bot.</p></div>
+    <div class='card'><h3>5. No Warranty</h3><p>The bot is provided "as is" without warranties of any kind.</p></div>
+    <div class='card'><h3>6. Account Security</h3><p>Users must secure their own Discord accounts while using the bot.</p></div>
+    <div class='card'><h3>7. Downtime</h3><p>We are not liable for any downtime or service interruptions.</p></div>
+    <div class='card'><h3>8. Usage Limits</h3><p>We may limit usage to ensure fair use of the bot.</p></div>
+    <div class='card'><h3>9. Prohibited Use</h3><p>Using the bot for illegal purposes is strictly prohibited.</p></div>
+    <div class='card'><h3>10. Data Collection</h3><p>We may collect limited data to enhance user experience.</p></div>
+    <div class='card'><h3>11. Bot Updates</h3><p>The bot may automatically update without prior notice.</p></div>
+    <div class='card'><h3>12. Feedback</h3><p>User feedback may be used to improve the bot.</p></div>
+    <div class='card'><h3>13. Ownership</h3><p>The bot and its contents are owned by the developer.</p></div>
+    <div class='card'><h3>14. Content Restrictions</h3><p>Do not use the bot to distribute inappropriate content.</p></div>
+    <div class='card'><h3>15. Third-party Services</h3><p>We are not responsible for third-party services linked to the bot.</p></div>
+    <div class='card'><h3>16. Termination</h3><p>We may remove access to the bot for violations of these terms.</p></div>
+    <div class='card'><h3>17. Jurisdiction</h3><p>These terms are governed by applicable laws.</p></div>
+    <div class='card'><h3>18. Dispute Resolution</h3><p>Users agree to resolve disputes with the developer privately.</p></div>
+    <div class='card'><h3>19. Service Modifications</h3><p>We may modify or discontinue features at our discretion.</p></div>
+    <div class='card'><h3>20. Acceptance Age</h3><p>You must be at least 13 years old to use the bot.</p></div>
+    <div class='card'><h3>21. Admin Rights</h3><p>We may grant or remove admin access based on need.</p></div>
+    <div class='card'><h3>22. Code Ownership</h3><p>The source code is proprietary and may not be reused.</p></div>
+    <div class='card'><h3>23. Support Limitations</h3><p>We provide support as-is without obligation.</p></div>
+    <div class='card'><h3>24. Feature Requests</h3><p>Requests are considered but not guaranteed.</p></div>
+    <div class='card'><h3>25. Bot Abuse</h3><p>Abuse of the bot will result in blacklisting.</p></div>
+    <div class='card'><h3>26. Language Use</h3><p>Inappropriate language will not be tolerated.</p></div>
+    <div class='card'><h3>27. Role Permissions</h3><p>Bot functions may require certain Discord permissions.</p></div>
+    <div class='card'><h3>28. Logging</h3><p>Some actions may be logged for moderation purposes.</p></div>
+    <div class='card'><h3>29. Community Guidelines</h3><p>Users must follow Discord’s terms and community rules.</p></div>
+    <div class='card'><h3>30. Contact</h3><p>Contact the bot developer via the support server for any concerns.</p></div>
+  </section>
+
+  <section id="privacy">
+    <h2>Privacy Policy</h2>
+    <div class='card'><h3>1. Data Collection</h3><p>We collect minimal data necessary to operate the bot.</p></div>
+    <div class='card'><h3>2. Usage Statistics</h3><p>We analyze usage to improve features.</p></div>
+    <div class='card'><h3>3. Data Storage</h3><p>Data is stored securely using trusted services.</p></div>
+    <div class='card'><h3>4. Access Control</h3><p>Only authorized developers can access stored data.</p></div>
+    <div class='card'><h3>5. Data Sharing</h3><p>We never sell or share your data with third parties.</p></div>
+    <div class='card'><h3>6. Consent</h3><p>By using the bot, you consent to our privacy practices.</p></div>
+    <div class='card'><h3>7. Anonymization</h3><p>Where possible, data is anonymized to protect privacy.</p></div>
+    <div class='card'><h3>8. GDPR Compliance</h3><p>We aim to comply with relevant data protection laws.</p></div>
+    <div class='card'><h3>9. User Rights</h3><p>You may request deletion of your data at any time.</p></div>
+    <div class='card'><h3>10. Log Files</h3><p>We may keep logs to track functionality and abuse.</p></div>
+    <div class='card'><h3>11. Third-party Links</h3><p>External services are not covered by our policy.</p></div>
+    <div class='card'><h3>12. Security Practices</h3><p>We take appropriate steps to secure user information.</p></div>
+    <div class='card'><h3>13. Breach Notification</h3><p>In case of a breach, affected users will be notified.</p></div>
+    <div class='card'><h3>14. Bot Logs</h3><p>Bot logs are reviewed for system improvements only.</p></div>
+    <div class='card'><h3>15. Temporary Data</h3><p>Temporary data is deleted automatically after use.</p></div>
+    <div class='card'><h3>16. Support Inquiries</h3><p>Inquiries via support channels may be stored for follow-up.</p></div>
+    <div class='card'><h3>17. No Ads</h3><p>PerQuest does not serve advertisements or tracking.</p></div>
+    <div class='card'><h3>18. Policy Changes</h3><p>We may update this privacy policy at any time.</p></div>
+    <div class='card'><h3>19. Contact Info</h3><p>You may contact us through the support server.</p></div>
+    <div class='card'><h3>20. API Use</h3><p>APIs used by PerQuest comply with their own terms.</p></div>
+    <div class='card'><h3>21. Storage Providers</h3><p>We use reliable cloud services for hosting.</p></div>
+    <div class='card'><h3>22. Location Data</h3><p>We do not collect location data.</p></div>
+    <div class='card'><h3>23. Data Retention</h3><p>We retain data only as long as necessary.</p></div>
+    <div class='card'><h3>24. Children’s Privacy</h3><p>PerQuest is not intended for users under 13.</p></div>
+    <div class='card'><h3>25. Backup Policy</h3><p>Backups are maintained to prevent data loss.</p></div>
+    <div class='card'><h3>26. Monitoring</h3><p>Data is monitored to maintain system health.</p></div>
+    <div class='card'><h3>27. Access Logs</h3><p>Access logs are limited and time-bound.</p></div>
+    <div class='card'><h3>28. Third-party APIs</h3><p>APIs are used responsibly and with care.</p></div>
+    <div class='card'><h3>29. Server Region</h3><p>We select server regions for speed and compliance.</p></div>
+    <div class='card'><h3>30. Account Linking</h3><p>No account linking with third-party accounts is required.</p></div>
+  </section>
+
+  <section id="policy">
+    <h2>Bot Policy</h2>
+    <div class='card'><h3>1. No Spam</h3><p>Users must not use the bot to send spam.</p></div>
+    <div class='card'><h3>2. Respect Limits</h3><p>All users must adhere to usage limits.</p></div>
+    <div class='card'><h3>3. Behavior</h3><p>Respectful behavior is expected while using the bot.</p></div>
+    <div class='card'><h3>4. Commands Use</h3><p>Use commands responsibly and avoid misuse.</p></div>
+    <div class='card'><h3>5. Reporting</h3><p>Report bugs or issues via the support server.</p></div>
+    <div class='card'><h3>6. Bots in DMs</h3><p>Do not use the bot in direct messages unless allowed.</p></div>
+    <div class='card'><h3>7. Server Rules</h3><p>The bot must be used in servers following Discord ToS.</p></div>
+    <div class='card'><h3>8. Automation</h3><p>Do not automate the bot using other bots/scripts.</p></div>
+    <div class='card'><h3>9. Token Use</h3><p>Never request or share bot tokens.</p></div>
+    <div class='card'><h3>10. Blacklisting</h3><p>Violation of rules may result in blacklist.</p></div>
+    <div class='card'><h3>11. Updates</h3><p>The bot may update without user notice.</p></div>
+    <div class='card'><h3>12. Language</h3><p>Use appropriate language with commands.</p></div>
+    <div class='card'><h3>13. Exploits</h3><p>Do not exploit bugs or loopholes.</p></div>
+    <div class='card'><h3>14. Fair Use</h3><p>Use the bot fairly across communities.</p></div>
+    <div class='card'><h3>15. Feedback</h3><p>Feedback is welcomed but not guaranteed to be applied.</p></div>
+    <div class='card'><h3>16. Admin Rights</h3><p>Bot may require admin permissions for full use.</p></div>
+    <div class='card'><h3>17. Privacy</h3><p>Respect others’ privacy while using commands.</p></div>
+    <div class='card'><h3>18. Blocking</h3><p>Users may be blocked for violating policies.</p></div>
+    <div class='card'><h3>19. Logging</h3><p>Activity may be logged for moderation and analytics.</p></div>
+    <div class='card'><h3>20. Mentions</h3><p>Avoid spamming mentions using the bot.</p></div>
+    <div class='card'><h3>21. Admin Use</h3><p>Bot should be managed by server admins/mods.</p></div>
+    <div class='card'><h3>22. Promotions</h3><p>Do not promote unrelated services via bot.</p></div>
+    <div class='card'><h3>23. Access</h3><p>Bot access may be removed at any time.</p></div>
+    <div class='card'><h3>24. Licensing</h3><p>The bot is not open-source and cannot be cloned.</p></div>
+    <div class='card'><h3>25. Limits</h3><p>Rate limits must be respected during use.</p></div>
+    <div class='card'><h3>26. Invite Use</h3><p>Do not misuse the invite link.</p></div>
+  </section>
+
+  <footer>&copy; PerQuest</footer>
+
+  <script>
+    function showPage(id, clickedElement) {
+      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      document.querySelectorAll('nav a').forEach(link => link.classList.remove('active-nav-link'));
+      if (clickedElement) {
+        clickedElement.classList.add('active-nav-link');
+      } else {
+        document.querySelector('nav a[onclick*="\'home\'"]').classList.add('active-nav-link');
+      }
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      showPage('home', null);
+    });
+  </script>
+</body>
+  </html>
